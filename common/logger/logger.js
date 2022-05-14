@@ -1,11 +1,10 @@
 const log4js = require('log4js');
 
-let hasInit = false;
 let defaultConfigure = {
     fileName: './app.log',              // 默认的日志名
     maxLogSize: 1024 * 1024 * 100,      // 默认文件大小100M
     backups: 100,                       // 默认保留文件数
-    Categorie: 'default'                // 默认的目录
+    categorie: 'default'                // 默认的目录
 }
 
 // 配置,是可以被多次调用的
@@ -22,8 +21,8 @@ exports.configure = function (configure) {
     if (!configure.backups) {
         configure.backups = defaultConfigure.backups;
     }
-    if (configure.Categorie) {
-        defaultConfigure.Categorie = configure.Categorie;
+    if (configure.categorie) {
+        defaultConfigure.categorie = configure.categorie;
     }
 
     // configure
@@ -40,16 +39,10 @@ exports.configure = function (configure) {
             default: { appenders: ['console', 'file'], level: 'trace' }, //error写入时是经过筛选后留下的
         }
     });
-
-    if (!hasInit) {
-        // set default log level
-        this.level('trace');
-    }
-    hasInit = true;
 }
 
 function getLogger() {
-    return log4js.getLogger(defaultConfigure.Categorie);
+    return log4js.getLogger(defaultConfigure.categorie);
 }
 
 // 绑定express app
