@@ -80,6 +80,13 @@ exports.fatal = function(...args) {
     getLogger().fatal(args);
 }
 
+global.logLevel = this.level;
+global.logTrace = this.trace;
+global.logDebug = this.debug;
+global.logInfo = this.info;
+global.logWarn = this.warn;
+global.logError = this.error;
+global.logFatal = this.fatal;
 
 
 
