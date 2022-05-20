@@ -1,5 +1,8 @@
 const redis = require('redis');
 
+// notice: 读二进制需要这个标记
+// redis.commandOptions({ returnBuffers: true }
+
 // 默认的配置
 const defaultOption = {
     username: '',           // 用户名
@@ -102,10 +105,9 @@ function closeConnection(connType) {
     });
 }
 
-exports.setConnectionOpts = setConnectionOpts;
-exports.createConnection = createConnection;
-exports.getConnection = getConnection;
-exports.closeConnection = closeConnection;
 
-
-
+module.exports = redis;
+module.exports.setConnectionOpts = setConnectionOpts;
+module.exports.createConnection = createConnection;
+module.exports.getConnection = getConnection;
+module.exports.closeConnection = closeConnection;
