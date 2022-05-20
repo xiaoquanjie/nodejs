@@ -105,9 +105,9 @@ function closeConnection(connType) {
     });
 }
 
-
-module.exports = redis;
+//module.exports = redis;
 module.exports.setConnectionOpts = setConnectionOpts;
 module.exports.createConnection = createConnection;
 module.exports.getConnection = getConnection;
 module.exports.closeConnection = closeConnection;
+module.exports.commandOptions = redis.commandOptions;
