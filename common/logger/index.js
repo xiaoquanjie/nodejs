@@ -1,6 +1,6 @@
 const log4js = require('log4js');
 
-let defaultConfigure = {
+const defaultConfigure = {
     fileName: './app.log',              // 默认的日志名
     maxLogSize: 1024 * 1024 * 100,      // 默认文件大小100M
     backups: 100,                       // 默认保留文件数
@@ -45,10 +45,10 @@ function getLogger() {
     return log4js.getLogger(defaultConfigure.categorie);
 }
 
-// 绑定express app
-exports.bindApp = function(app) {
+// express可以用的中间件
+exports.expressLogger = function() {
     var logger = log4js.connectLogger(getLogger());
-    app.use(logger);
+    return logger;
 }
 
 // 设置等级
