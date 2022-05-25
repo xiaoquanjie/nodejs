@@ -8,7 +8,7 @@ const defaultConfigure = {
 }
 
 // 配置,是可以被多次调用的
-exports.configure = function (configure) {
+function configure(configure) {
     if (!configure) {
         configure = defaultConfigure;
     }
@@ -46,47 +46,42 @@ function getLogger() {
 }
 
 // express可以用的中间件
-exports.expressLogger = function() {
+module.exports = function() {
     var logger = log4js.connectLogger(getLogger());
     return logger;
 }
 
+module.exports.configure = configure;
+
 // 设置等级
-exports.level = function level(lvl) {
+module.exports.level = function level(lvl) {
     getLogger().level = lvl;
 }
 
-exports.trace = function(...args) {
+module.exports.trace = function(...args) {
     getLogger().trace(args);
 }
 
-exports.debug = function(...args) {
+module.exports.debug = function(...args) {
     getLogger().debug(args);
 }
 
-exports.info = function(...args) {
+module.exports.info = function(...args) {
     getLogger().info(args);
 }
 
-exports.warn = function(...args) {
+module.exports.warn = function(...args) {
     getLogger().warn(args);
 }
 
-exports.error = function(...args) {
+module.exports.error = function(...args) {
     getLogger().error(args);
 }
 
-exports.fatal = function(...args) {
+module.exports.fatal = function(...args) {
     getLogger().fatal(args);
 }
 
-global.logLevel = this.level;
-global.logTrace = this.trace;
-global.logDebug = this.debug;
-global.logInfo = this.info;
-global.logWarn = this.warn;
-global.logError = this.error;
-global.logFatal = this.fatal;
 
 
 
