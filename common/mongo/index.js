@@ -82,8 +82,18 @@ function Schema(definition) {
 }
 
 // 返回table操作, https://mongoosejs.com/docs/models.html
-exports.model = function(db, name, definition) {
-    return db.model(name, Schema(definition));
+// 返回的table操作，是支持await的
+exports.model = function(connType, name, definition) {
+    return new Promise(function(resolve, reject) {
+        getConnection(connType)
+        .then(function(conn) {
+            let m = conn.model(name, definition);
+            resolve(m);
+        })
+        .catch(function(err) {
+            reject(err);
+        });
+    });
 }
 
 exports.createConnection = createConnection;
