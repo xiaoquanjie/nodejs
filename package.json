@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "logger": "file:common/logger",
+    "mongo": "file:common/mongo",
+    "mysql": "file:common/mysql",
+    "redis": "file:common/redis",
+    "security": "file:common/security"
+  }
+}
