@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const util = require('../util');
 
 // 默认的配置
-const defaultOption = {
+let defaultOption = {
     autoIndex: false,
     autoCreate: false,
     dbName: undefined,
@@ -13,9 +14,7 @@ const connTypeMap = {};
 
 // 创建一个mongo连接, 返回一个promise
 function createConnection(uri, opts) {
-    if (!opts) {
-        opts = defaultOption;
-    }
+    defaultOption = util.deepmerge(defaultOption, opts);
     return new Promise(function(resolve, reject) {
         mongoose.createConnection(uri, opts, function(err, db) {
             if (err) {
