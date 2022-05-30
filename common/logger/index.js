@@ -19,7 +19,7 @@ function configure(configure) {
             // 控制台输出者
             console: { type: 'console' },
             // 文件输出，
-            file: { type: 'file', filename: configure.fileName, maxLogSize: configure.maxLogSize, keepFileExt: true, backups: configure.backups }
+            file: { type: 'file', filename: defaultConfigure.fileName, maxLogSize: defaultConfigure.maxLogSize, keepFileExt: true, backups: defaultConfigure.backups }
         },
         categories: {
             //appenders:采用的appender,取上面appenders项,level:设置级别
