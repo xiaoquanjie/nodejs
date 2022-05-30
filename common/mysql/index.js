@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const util = require('../util');
 
 // 默认的配置
 const defaultOption = {
@@ -15,25 +16,7 @@ const connTypeMap = {
 };
 
 function createConnection(opts) {
-    if (!opts.host) {
-        opts.host = defaultOption.host;
-    }
-    if (!opts.port) {
-        opts.port = defaultOption.port;
-    }
-    if (!opts.user) {
-        opts.user = defaultOption.user;
-    }
-    if (!opts.password) {
-        opts.password = defaultOption.password;
-    }
-    if (!opts.database) {
-        opts.database = defaultOption.database;
-    }
-    if (!opts.connectTimeout) {
-        opts.connectTimeout = defaultOption.connectTimeout;
-    }
-    
+    opts = util.deepmerge(defaultOption, opts);
     return new Promise(function(resolve, reject) {
         var conn = mysql.createConnection(opts);
         conn.connect(function(err) {
