@@ -1,7 +1,7 @@
 const log4js = require('log4js');
 const util = require('../util');
 
-defaultConfigure = {
+let defaultConfigure = {
     fileName: './app.log',              // 默认的日志名
     maxLogSize: 1024 * 1024 * 100,      // 默认文件大小100M
     backups: 100,                       // 默认保留文件数
