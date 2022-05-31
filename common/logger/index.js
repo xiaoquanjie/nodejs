@@ -1,5 +1,5 @@
 const log4js = require('log4js');
-const util = require('../util');
+const utils = require('../utils');
 
 let defaultConfigure = {
     fileName: './app.log',              // 默认的日志名
@@ -10,7 +10,7 @@ let defaultConfigure = {
 
 // 配置,是可以被多次调用的
 function configure(configure) {
-    defaultConfigure = util.deepmerge(defaultConfigure, configure);
+    defaultConfigure = utils.deepmerge(defaultConfigure, configure);
     
     // configure
     log4js.configure({
