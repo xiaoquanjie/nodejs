@@ -1,4 +1,4 @@
-const util = require('../util');
+const utils = require('../utils');
 
 // url encoded option
 let defaultEncodedConfigure = {
@@ -36,13 +36,13 @@ module.exports = function(urlEncodedOpt, jsonOpt, cookieSecret, sessionOpt, jwtO
 
     // query解析
     if (urlEncodedOpt != undefined) {
-        defaultEncodedConfigure = util.deepmerge(defaultEncodedConfigure, urlEncodedOpt);
+        defaultEncodedConfigure = utils.deepmerge(defaultEncodedConfigure, urlEncodedOpt);
         router.use(require('body-parser').urlencoded(defaultEncodedConfigure));
     }
 
     // 解析body Content-Type:application/json
     if (jsonOpt != undefined) {
-        jsonOpt = util.deepmerge({limit: '100mb'}, jsonOpt);
+        jsonOpt = utils.deepmerge({limit: '100mb'}, jsonOpt);
         router.use(require('express').json(jsonOpt))
     }
 
@@ -53,13 +53,13 @@ module.exports = function(urlEncodedOpt, jsonOpt, cookieSecret, sessionOpt, jwtO
 
     // 会话
     if (sessionOpt != undefined) {
-        defaultSessionConfigure = util.deepmerge(defaultSessionConfigure, sessionOpt);
+        defaultSessionConfigure = utils.deepmerge(defaultSessionConfigure, sessionOpt);
         router.use(require('express-session')(defaultSessionConfigure));
     }
 
     // jsonwebtoken, 记得要处理异常
     if(jwtOpt != undefined) {
-        defaultJwtConfigure = util.deepmerge(defaultJwtConfigure, jwtOpt);
+        defaultJwtConfigure = utils.deepmerge(defaultJwtConfigure, jwtOpt);
         ex_jwt = require("express-jwt").expressjwt(defaultJwtConfigure.opt).unless({path:defaultJwtConfigure.path});
         router.use(ex_jwt);
     }
