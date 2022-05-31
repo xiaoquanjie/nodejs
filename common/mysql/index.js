@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const util = require('../util');
+const utils = require('../utils');
 
 // 默认的配置
 const defaultOption = {
@@ -16,7 +16,7 @@ const connTypeMap = {
 };
 
 function createConnection(opts) {
-    opts = util.deepmerge(defaultOption, opts);
+    opts = utils.deepmerge(defaultOption, opts);
     return new Promise(function(resolve, reject) {
         var conn = mysql.createConnection(opts);
         conn.connect(function(err) {
