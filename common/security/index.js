@@ -1,58 +1,72 @@
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const stringRandom = require('string-random');
-const express = require('express');
+const util = require('../util');
 
-const defaultConfigure = {
-    // url encoded option
-    urlEncodedOpt: {
-        extended: true
+// url encoded option
+let defaultEncodedConfigure = {
+    extended: true
+};
+
+// session option
+let defaultSessionConfigure = {
+    secret: undefined,              // 必须要有
+    resave: true,
+    saveUninitialized: false,
+    cookie: { 
+        maxAge: 1000* 60 * 60 
+    }
+};
+
+// jsonwebtoken option
+let defaultJwtConfigure = {
+    opt: {
+        algorithms: ['HS256'],
+        secret: undefined,         // 必须要有
+        requestProperty: 'auth',   // 有效负载的属性的名称
+        isRevoked: undefined,      // 验证令牌是否被撤销的函数
+        credentialsRequired: true, // 如果为假，如果请求不包含令牌而不是失败，则继续下一个中间件
+        getToken : undefined       // 校验token的函数，默认情况下它在Authorizationheader中查找
     },
-    // signed cookie secret
-    cookieSecret: stringRandom(128, { numbers: true }),
-    // session option
-    sessionOpt: {
-        secret: stringRandom(128, { numbers: true }),
-        resave: true,
-        saveUninitialized: false,
-        cookie: { 
-            maxAge: 1000* 60 * 60 
-        }
-    }
-}
+    path: [],
+    expire: '6h'
+};
 
-function configure(urlEncodedOpt, cookieSecret, sessionOpt) {
-    if (urlEncodedOpt) {
-        defaultConfigure.urlEncodedOpt = urlEncodedOpt;
-    }
-    if (cookieSecret) {
-        defaultConfigure.cookieSecret = cookieSecret;
-    }
-    if (sessionOpt) {
-        defaultConfigure.sessionOpt = sessionOpt;
-    }
-}
-
-module.exports = function(urlEncodedOpt, cookieSecret, sessionOpt) {
-    configure(urlEncodedOpt, cookieSecret, sessionOpt);
-
-    var router = express.Router();
+// opt不为undefined时，表示功能开启
+module.exports = function(urlEncodedOpt, cookieSecret, sessionOpt, jwtOpt) {
+    // 创建路由
+    var router = require('express').Router();
 
     // query解析
-    router.use(bodyParser.urlencoded(defaultConfigure.urlEncodedOpt));
+    if (urlEncodedOpt != undefined) {
+        defaultEncodedConfigure = util.deepmerge(defaultEncodedConfigure, urlEncodedOpt);
+        router.use(require('body-parser').urlencoded(defaultEncodedConfigure));
+    }
 
     // cookie功能
-    router.use(cookieParser(defaultConfigure.cookieSecret));
+    if (cookieSecret != undefined) {
+        router.use(require('cookie-parser')(cookieSecret));
+    }
 
     // 会话
-    router.use(session(defaultConfigure.sessionOpt));
+    if (sessionOpt != undefined) {
+        defaultSessionConfigure = util.deepmerge(defaultSessionConfigure, sessionOpt);
+        router.use(require('express-session')(defaultSessionConfigure));
+    }
 
+    // jsonwebtoken, 记得要处理异常
+    if(jwtOpt != undefined) {
+        defaultJwtConfigure = util.deepmerge(defaultJwtConfigure, jwtOpt);
+        ex_jwt = require("express-jwt").expressjwt(defaultJwtConfigure.opt).unless({path:defaultJwtConfigure.path});
+        router.use(ex_jwt);
+    }
+    
     // 返回路由
     return router;
 }
 
-module.exports.configure = configure;
+module.exports.jwtSign = function(payload) {
+    // payload可在req.auth里获取到
+    let token = 'Bearer ' + require('jsonwebtoken').sign(payload, defaultJwtConfigure.opt.secret, { expiresIn: defaultJwtConfigure.expire});
+    return token;
+}
 
 module.exports.clearCookie = function(res, key) {
     return res.clearCookie(key);
