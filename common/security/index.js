@@ -30,7 +30,7 @@ let defaultJwtConfigure = {
 };
 
 // opt不为undefined时，表示功能开启
-module.exports = function(urlEncodedOpt, cookieSecret, sessionOpt, jwtOpt) {
+module.exports = function(urlEncodedOpt, jsonOpt, cookieSecret, sessionOpt, jwtOpt) {
     // 创建路由
     var router = require('express').Router();
 
@@ -38,6 +38,12 @@ module.exports = function(urlEncodedOpt, cookieSecret, sessionOpt, jwtOpt) {
     if (urlEncodedOpt != undefined) {
         defaultEncodedConfigure = util.deepmerge(defaultEncodedConfigure, urlEncodedOpt);
         router.use(require('body-parser').urlencoded(defaultEncodedConfigure));
+    }
+
+    // 解析body Content-Type:application/json
+    if (jsonOpt != undefined) {
+        jsonOpt = util.deepmerge({limit: '100mb'}, jsonOpt);
+        router.use(require('express').json(jsonOpt))
     }
 
     // cookie功能
