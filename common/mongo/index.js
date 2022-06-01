@@ -70,7 +70,7 @@ function closeConnection(connType) {
         if (!connTypeMap[connType].conn) {
             return resolve();
         }
-        var conn = connTypeMap[connType].conn;
+        let conn = connTypeMap[connType].conn;
         connTypeMap[connType].conn = undefined;
         conn.close().then(function() { resolve(); }).catch(function(err) { reject(err); });
     });

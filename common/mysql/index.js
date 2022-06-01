@@ -18,7 +18,7 @@ const connTypeMap = {
 function createConnection(opts) {
     opts = utils.deepmerge(defaultOption, opts);
     return new Promise(function(resolve, reject) {
-        var conn = mysql.createConnection(opts);
+        let conn = mysql.createConnection(opts);
         conn.connect(function(err) {
             if (err) {
                 reject(err);
@@ -73,7 +73,7 @@ function closeConnection(connType) {
         if (!connTypeMap[connType].conn) {
             return resolve();
         }
-        var conn = connTypeMap[connType].conn;
+        let conn = connTypeMap[connType].conn;
         connTypeMap[connType].conn = undefined;
         conn.end(function(err) {
             resolve();
@@ -86,7 +86,7 @@ function query(connType, sql, any) {
     return new Promise(function(resolve, reject) {
         getConnection(connType)
         .then(function(conn) {
-            var cb = function(err, results, fields) {
+            let cb = function(err, results, fields) {
                 if (err) {
                     reject(err);
                 }

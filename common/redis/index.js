@@ -17,7 +17,7 @@ const connTypeMap = {
 };
 
 function createUri(opts) {
-    var uri = 'redis://';
+    let uri = 'redis://';
     if (!opts.username) {
         opts.username = defaultOption.username;
     }
@@ -43,7 +43,7 @@ function createUri(opts) {
 
 // 创建一个连接
 function createConnection(opts) {
-    var uri = createUri(opts);
+    let uri = createUri(opts);
     return new Promise(function(resolve, reject) {
         const client = redis.createClient({url: uri});
         client.connect();
@@ -99,7 +99,7 @@ function closeConnection(connType) {
         if (!connTypeMap[connType].conn) {
             return resolve();
         }
-        var conn = connTypeMap[connType].conn;
+        let conn = connTypeMap[connType].conn;
         connTypeMap[connType].conn = undefined;
         conn.quit().then(function() { resolve(); }).catch(function(err) { reject(err); });
     });

@@ -34,7 +34,7 @@ function getLogger() {
 
 // express可以用的中间件
 module.exports = function() {
-    var logger = log4js.connectLogger(getLogger());
+    let logger = log4js.connectLogger(getLogger());
     return logger;
 }
 

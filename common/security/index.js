@@ -32,7 +32,7 @@ let defaultJwtConfigure = {
 // opt不为undefined时，表示功能开启
 module.exports = function(urlEncodedOpt, jsonOpt, cookieSecret, sessionOpt, jwtOpt) {
     // 创建路由
-    var router = require('express').Router();
+    let router = require('express').Router();
 
     // query解析
     if (urlEncodedOpt != undefined) {
