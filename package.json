@@ -4,6 +4,7 @@
     "mongo": "file:common/mongo",
     "mysql": "file:common/mysql",
     "redis": "file:common/redis",
-    "security": "file:common/security"
+    "security": "file:common/security",
+    "utils": "file:common/utils"
   }
 }
