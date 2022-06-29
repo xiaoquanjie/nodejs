@@ -3,7 +3,7 @@ const utils = require('../utils');
 
 // 默认的配置
 const defaultOption = {
-    autoIndex: false,
+    autoIndex: true,
     autoCreate: false,
     dbName: undefined,
     connectTimeoutMS: 3000 // 不知为啥没效果
@@ -86,7 +86,10 @@ exports.model = function(connType, name, definition) {
     return new Promise(function(resolve, reject) {
         getConnection(connType)
         .then(function(conn) {
-            let m = conn.model(name, definition);
+            if (!(definition instanceof mongoose.Schema)) {
+                definition = new mongoose.Schema(definition);
+            }
+            let m = conn.model(name, definition, name);
             resolve(m);
         })
         .catch(function(err) {
